@@ -66,9 +66,8 @@ public class QueryGeneratorUtils {
         return objectValues;
     }
 
-
     @SneakyThrows
-    public static Object getColumnNamesAndValues(Object value, boolean isId) {
+    protected static Object getColumnNamesAndValues(Object value, boolean isId) {
         StringJoiner objectValues = new StringJoiner(", ");
         for (Field declaredField : value.getClass().getDeclaredFields()) {
             Column columnAnnotation = declaredField.getAnnotation(Column.class);
