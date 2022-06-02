@@ -20,7 +20,7 @@ public class QueryGeneratorUtils {
             if (idAnnotation != null) {
                 return declaredField.getName();
             } else {
-                throw new NoSuchElementException();
+                throw new IllegalArgumentException("Class is not ORM entity");
             }
         }
         return null;
@@ -34,7 +34,7 @@ public class QueryGeneratorUtils {
         return tableAnnotation.name().isEmpty() ? type.getSimpleName() : tableAnnotation.name();
     }
 
-    protected static StringJoiner getColumnNames(Class<?> type) {
+    protected static String getColumnNames(Class<?> type) {
         StringJoiner columnNames = new StringJoiner(", ");
 
         for (Field declaredField : type.getDeclaredFields()) {
@@ -46,11 +46,11 @@ public class QueryGeneratorUtils {
                 throw new IllegalArgumentException("Class is not ORM entity");
             }
         }
-        return columnNames;
+        return columnNames.toString();
     }
 
     @SneakyThrows
-    protected static StringJoiner getValues(Object value) {
+    protected static String getValues(Object value) {
         StringJoiner objectValues = new StringJoiner(", ", "(", ")");
 
         for (Field declaredField : value.getClass().getDeclaredFields()) {
@@ -63,11 +63,11 @@ public class QueryGeneratorUtils {
                 throw new IllegalArgumentException("Class is not ORM entity");
             }
         }
-        return objectValues;
+        return objectValues.toString();
     }
 
     @SneakyThrows
-    protected static Object getColumnNamesAndValues(Object value, boolean isId) {
+    protected static String getColumnNamesAndValues(Object value, boolean isId) {
         StringJoiner objectValues = new StringJoiner(", ");
         for (Field declaredField : value.getClass().getDeclaredFields()) {
             Column columnAnnotation = declaredField.getAnnotation(Column.class);
@@ -88,7 +88,7 @@ public class QueryGeneratorUtils {
                 throw new IllegalArgumentException("Class is not ORM entity");
             }
         }
-        return objectValues;
+        return objectValues.toString();
     }
 
 
