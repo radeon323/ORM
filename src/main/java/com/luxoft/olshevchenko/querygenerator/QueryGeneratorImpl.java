@@ -9,7 +9,6 @@ import static com.luxoft.olshevchenko.querygenerator.QueryGeneratorUtils.*;
  */
 public class QueryGeneratorImpl implements QueryGenerator {
 
-    //    "SELECT id, person_name, person_salary FROM Person;"
     @Override
     public String findAll(Class<?> type) {
         StringBuilder query = new StringBuilder("SELECT ");
@@ -20,7 +19,6 @@ public class QueryGeneratorImpl implements QueryGenerator {
         return query.toString();
     }
 
-    //    "SELECT id, person_name, person_salary FROM Person WHERE id = 1;"
     @Override
     public String findById(Class<?> type, Serializable id) {
         StringBuilder query = new StringBuilder("SELECT ");
@@ -35,7 +33,6 @@ public class QueryGeneratorImpl implements QueryGenerator {
         return query.toString();
     }
 
-    //    "DELETE FROM Person WHERE id = 1;"
     @Override
     public String deleteById(Class<?> type, Serializable id) {
         StringBuilder query = new StringBuilder("DELETE FROM ");
@@ -48,7 +45,6 @@ public class QueryGeneratorImpl implements QueryGenerator {
         return query.toString();
     }
 
-    //    "INSERT INTO Person (id, person_name, person_salary) VALUES (1, Bob, 100.1);"
     @Override
     public String insert(Object value) {
         Class<?> type = value.getClass();
@@ -63,7 +59,6 @@ public class QueryGeneratorImpl implements QueryGenerator {
         return query.toString();
     }
 
-    //    "UPDATE Person SET person_name = Bob, person_salary = 100.1 WHERE id = 1;"
     @Override
     public String update(Object value) {
         Class<?> type = value.getClass();

@@ -43,7 +43,7 @@ public class QueryGeneratorUtils {
                 String columnName = columnAnnotation.name().isEmpty() ? declaredField.getName() : columnAnnotation.name();
                 columnNames.add(columnName);
             } else {
-                throw new NoSuchElementException();
+                throw new IllegalArgumentException("Class is not ORM entity");
             }
         }
         return columnNames;
@@ -60,7 +60,7 @@ public class QueryGeneratorUtils {
                 Object result = declaredField.get(value);
                 objectValues.add(result.toString());
             } else {
-                throw new NoSuchElementException();
+                throw new IllegalArgumentException("Class is not ORM entity");
             }
         }
         return objectValues;
@@ -85,7 +85,7 @@ public class QueryGeneratorUtils {
                 }
 
             } else {
-                throw new NoSuchElementException();
+                throw new IllegalArgumentException("Class is not ORM entity");
             }
         }
         return objectValues;
