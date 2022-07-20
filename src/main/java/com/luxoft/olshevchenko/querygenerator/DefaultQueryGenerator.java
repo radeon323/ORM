@@ -7,7 +7,7 @@ import static com.luxoft.olshevchenko.querygenerator.QueryGeneratorUtils.*;
 /**
  * @author Oleksandr Shevchenko
  */
-public class QueryGeneratorImpl implements QueryGenerator {
+public class DefaultQueryGenerator implements QueryGenerator {
 
     @Override
     public String findAll(Class<?> type) {
@@ -26,9 +26,9 @@ public class QueryGeneratorImpl implements QueryGenerator {
         query.append(" FROM ");
         query.append(getTableName(type));
         query.append(" WHERE ");
-        query.append(getIdAnnotationName(type));
+        query.append("id");
         query.append(" = ");
-        query.append(id);
+        query.append(id.toString());
         query.append(";");
         return query.toString();
     }
@@ -38,9 +38,9 @@ public class QueryGeneratorImpl implements QueryGenerator {
         StringBuilder query = new StringBuilder("DELETE FROM ");
         query.append(getTableName(type));
         query.append(" WHERE ");
-        query.append(getIdAnnotationName(type));
+        query.append("id");
         query.append(" = ");
-        query.append(id);
+        query.append(id.toString());
         query.append(";");
         return query.toString();
     }
@@ -65,9 +65,9 @@ public class QueryGeneratorImpl implements QueryGenerator {
         StringBuilder query = new StringBuilder("UPDATE ");
         query.append(getTableName(type));
         query.append(" SET ");
-        query.append(getColumnNamesAndValues(value, false));
+        query.append(getColumnNamesAndValuesExceptId(value));
         query.append(" WHERE ");
-        query.append(getColumnNamesAndValues(value, true));
+        query.append(getIdColumnNameAndValue(value));
         query.append(";");
         return query.toString();
     }

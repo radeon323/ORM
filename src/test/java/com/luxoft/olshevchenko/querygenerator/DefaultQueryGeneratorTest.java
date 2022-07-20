@@ -6,18 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class QueryGeneratorImplTest {
-
-    QueryGenerator queryGenerator = new QueryGeneratorImpl();
-    Person person = setPerson();
-
-    private Person setPerson() {
-        Person person = new Person();
-        person.setId(1);
-        person.setName("Bob");
-        person.setSalary(100.1);
-        return person;
-    }
+/**
+ * @author Oleksandr Shevchenko
+ */
+class DefaultQueryGeneratorTest {
+    private final QueryGenerator queryGenerator = new DefaultQueryGenerator();
+    private final Person person = new Person(1,"Bob",100.1);
 
 
     @Test

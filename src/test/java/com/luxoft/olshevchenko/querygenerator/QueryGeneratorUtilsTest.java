@@ -4,47 +4,20 @@ import com.luxoft.olshevchenko.querygenerator.entity.Person;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author Oleksandr Shevchenko
+ */
 class QueryGeneratorUtilsTest {
-    Class<?> clazz = Person.class;
-    Class<?> clazzNotOrm = PersonNotOrm.class;
-    Object person = setPerson();
-    Object personNotOrm = setPersonNotOrm();
+    private final Class<?> clazz = Person.class;
+    private final Class<?> clazzWithoutAnnotation = PersonWithoutAnnotation.class;
+    private final Object person = new Person(1,"Bob",100.1);
+    private final Object personWithoutAnnotation = new PersonWithoutAnnotation(1,"Bob",100.1);
 
-    private Person setPerson() {
-        Person person = new Person();
-        person.setId(1);
-        person.setName("Bob");
-        person.setSalary(100.1);
-        return person;
-    }
-
-    private PersonNotOrm setPersonNotOrm() {
-        PersonNotOrm person = new PersonNotOrm();
-        person.setId(1);
-        person.setName("Bob");
-        person.setSalary(100.1);
-        return person;
-    }
-
-    @Test
-    @DisplayName("Test Get id annotation name method")
-    void testGetIdAnnotationName() {
-        String expectedString = "id";
-        String actualString = QueryGeneratorUtils.getIdAnnotationName(clazz);
-        assertEquals(expectedString, actualString);
-    }
-
-    @Test
-    @DisplayName("Test Get id annotation name method if class is not ORM entity")
-    void testGetIdAnnotationNameIfNotOrm() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> QueryGeneratorUtils.getIdAnnotationName(clazzNotOrm));
-    }
 
     @Test
     @DisplayName("Test Get table name method")
@@ -55,9 +28,11 @@ class QueryGeneratorUtilsTest {
     }
 
     @Test
-    @DisplayName("Test Get table name method if class is not ORM entity")
-    void testGetTableNameIfNotOrm() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> QueryGeneratorUtils.getTableName(clazzNotOrm));
+    @DisplayName("Test Get table name method if annotation @Table is missing")
+    void testGetTableNameIfAnnotationMissing() {
+        String expectedString = "PersonWithoutAnnotation";
+        String actualString = QueryGeneratorUtils.getTableName(clazzWithoutAnnotation);
+        assertEquals(expectedString, actualString);
     }
 
     @Test
@@ -69,9 +44,11 @@ class QueryGeneratorUtilsTest {
     }
 
     @Test
-    @DisplayName("Test Get column names method if class is not ORM entity")
-    void testGetColumnNamesIfNotOrm() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> QueryGeneratorUtils.getColumnNames(clazzNotOrm));
+    @DisplayName("Test Get column names method if annotation @Column is missing")
+    void testGetColumnNamesIfAnnotationMissing() {
+        String expectedString = "id, name, salary";
+        String actualString = QueryGeneratorUtils.getColumnNames(clazzWithoutAnnotation);
+        assertEquals(expectedString, actualString);
     }
 
     @Test
@@ -83,16 +60,26 @@ class QueryGeneratorUtilsTest {
     }
 
     @Test
-    @DisplayName("Test Get values method if class is not ORM entity")
-    void testGetValuesIfNotOrm() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> QueryGeneratorUtils.getValues(personNotOrm));
+    @DisplayName("Test Get values method if annotation @Column is missing")
+    void testGetValuesIfAnnotationMissing() {
+        String expectedString = "(1, Bob, 100.1)";
+        String actualString = QueryGeneratorUtils.getValues(personWithoutAnnotation);
+        assertEquals(expectedString, actualString);
     }
 
     @Test
     @DisplayName("Test Get column names and values except id")
     void testGetColumnNamesAndValuesIfNotId() {
         String expectedString = "person_name = Bob, person_salary = 100.1";
-        String actualString = QueryGeneratorUtils.getColumnNamesAndValues(person, false);
+        String actualString = QueryGeneratorUtils.getColumnNamesAndValuesExceptId(person);
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    @DisplayName("Test Get column names and values except id if annotation @Id is missing")
+    void testGetColumnNamesAndValuesNotIdIfAnnotationMissing() {
+        String expectedString = "name = Bob, salary = 100.1";
+        String actualString = QueryGeneratorUtils.getColumnNamesAndValuesExceptId(personWithoutAnnotation);
         assertEquals(expectedString, actualString);
     }
 
@@ -100,21 +87,32 @@ class QueryGeneratorUtilsTest {
     @DisplayName("Test Get id column name and value")
     void testGetColumnNamesAndValuesIfId() {
         String expectedString = "id = 1";
-        String actualString = QueryGeneratorUtils.getColumnNamesAndValues(person, true);
+        String actualString = QueryGeneratorUtils.getIdColumnNameAndValue(person);
         assertEquals(expectedString, actualString);
     }
 
     @Test
-    @DisplayName("Test Get column names and values except id if class is not ORM entity")
-    void testGetColumnNamesAndValuesIfNotOrm() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> QueryGeneratorUtils.getColumnNamesAndValues(personNotOrm, false));
+    @DisplayName("Test Get id column name and value if annotation @Id is missing")
+    void testGetColumnNamesAndValuesIfIdIfAnnotationMissing() {
+        String expectedString = "id = 1";
+        String actualString = QueryGeneratorUtils.getIdColumnNameAndValue(personWithoutAnnotation);
+        assertEquals(expectedString, actualString);
     }
+
 
     @Getter
     @Setter
-    private static class PersonNotOrm {
+    private static class PersonWithoutAnnotation {
         private int id;
         private String name;
         private double salary;
+
+        public PersonWithoutAnnotation(int id, String name, double salary) {
+            this.id = id;
+            this.name = name;
+            this.salary = salary;
+        }
     }
+
+
 }
