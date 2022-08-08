@@ -54,7 +54,7 @@ class QueryGeneratorUtilsTest {
     @Test
     @DisplayName("Test Get values method")
     void testGetValues() {
-        String expectedString = "(1, Bob, 100.1)";
+        String expectedString = "(1, 'Bob', 100.1)";
         String actualString = QueryGeneratorUtils.getValues(person);
         assertEquals(expectedString, actualString);
     }
@@ -62,7 +62,7 @@ class QueryGeneratorUtilsTest {
     @Test
     @DisplayName("Test Get values method if annotation @Column is missing")
     void testGetValuesIfAnnotationMissing() {
-        String expectedString = "(1, Bob, 100.1)";
+        String expectedString = "(1, 'Bob', 100.1)";
         String actualString = QueryGeneratorUtils.getValues(personWithoutAnnotation);
         assertEquals(expectedString, actualString);
     }
@@ -70,7 +70,7 @@ class QueryGeneratorUtilsTest {
     @Test
     @DisplayName("Test Get column names and values except id")
     void testGetColumnNamesAndValuesIfNotId() {
-        String expectedString = "person_name = Bob, person_salary = 100.1";
+        String expectedString = "person_name = 'Bob', person_salary = 100.1";
         String actualString = QueryGeneratorUtils.getColumnNamesAndValuesExceptId(person);
         assertEquals(expectedString, actualString);
     }
@@ -78,7 +78,7 @@ class QueryGeneratorUtilsTest {
     @Test
     @DisplayName("Test Get column names and values except id if annotation @Id is missing")
     void testGetColumnNamesAndValuesNotIdIfAnnotationMissing() {
-        String expectedString = "name = Bob, salary = 100.1";
+        String expectedString = "name = 'Bob', salary = 100.1";
         String actualString = QueryGeneratorUtils.getColumnNamesAndValuesExceptId(personWithoutAnnotation);
         assertEquals(expectedString, actualString);
     }

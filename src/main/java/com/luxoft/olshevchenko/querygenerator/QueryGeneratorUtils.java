@@ -45,7 +45,7 @@ public class QueryGeneratorUtils {
         StringJoiner objectValues = new StringJoiner(", ", "(", ")");
         for (Field declaredField : value.getClass().getDeclaredFields()) {
             declaredField.setAccessible(true);
-            Object result = declaredField.get(value);
+            Object result = createValueInQuotesIfDeclaredFieldIsString(value, declaredField);
             objectValues.add(result.toString());
         }
         return objectValues.toString();
@@ -85,10 +85,19 @@ public class QueryGeneratorUtils {
         }
         StringBuilder columnNameAndValue = new StringBuilder(columnName);
         declaredField.setAccessible(true);
+        Object result = createValueInQuotesIfDeclaredFieldIsString(value, declaredField);
         columnNameAndValue.append(" = ");
-        columnNameAndValue.append(declaredField.get(value));
+        columnNameAndValue.append(result);
         objectValues.add(columnNameAndValue);
     }
- 
+
+    private static Object createValueInQuotesIfDeclaredFieldIsString(Object value, Field declaredField) throws IllegalAccessException {
+        Object result = declaredField.get(value);
+        if (result.getClass().equals(String.class)) {
+            result = "'" + result + "'";
+        }
+        return result;
+    }
+
 
 }
